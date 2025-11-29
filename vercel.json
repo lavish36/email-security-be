@@ -4,14 +4,9 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/index.py"
+      "dest": "/api/index.py"
     }
   ],
-  "functions": {
-    "api/*.py": {
-      "maxDuration": 60
-    }
-  },
   "env": {
     "PYTHONUNBUFFERED": "1"
   }
