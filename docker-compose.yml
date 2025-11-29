@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  domain-security-api:
+    build: .
+    container_name: domain-security-api
+    ports:
+      - "8000:8000"
+    environment:
+      - API_TITLE=Domain Security API
+      - API_VERSION=1.0.0
+      - DEBUG=true
+      - HOST=0.0.0.0
+      - PORT=8000
+      - RATE_LIMIT_PER_MINUTE=60
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add Redis for caching and rate limiting
+  redis:
+    image: redis:7-alpine
+    container_name: domain-security-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  redis_data: 
